@@ -22,23 +22,21 @@ defmodule Taglet.TagletQuery do
   defp join_taggings_from_tag(query, context, taggable_type, nil) do
     query
     |> join(:inner, [t], tg in Tagging,
-      t.id == tg.tag_id
-      and
-      tg.taggable_type == ^taggable_type
-      and
-      tg.context == ^context
+      on:
+        t.id == tg.tag_id and
+          tg.taggable_type == ^taggable_type and
+          tg.context == ^context
     )
   end
+
   defp join_taggings_from_tag(query, context, taggable_type, taggable_id) do
     query
     |> join(:inner, [t], tg in Tagging,
-      t.id == tg.tag_id
-      and
-      tg.taggable_type == ^taggable_type
-      and
-      tg.context == ^context
-      and
-      tg.taggable_id == ^taggable_id
+      on:
+        t.id == tg.tag_id and
+          tg.taggable_type == ^taggable_type and
+          tg.context == ^context and
+          tg.taggable_id == ^taggable_id
     )
   end
 
@@ -61,10 +59,11 @@ defmodule Taglet.TagletQuery do
   @doc """
   Build the query to get all Tags of a tag_resource and context.
   """
-  def get_tags_association(struct, tag_resource, context)  do
-    taggable_type = struct.__struct__
-    |> Module.split
-    |> List.last
+  def get_tags_association(struct, tag_resource, context) do
+    taggable_type =
+      struct.__struct__
+      |> Module.split()
+      |> List.last()
 
     case struct.id do
       nil -> get_all_tags(tag_resource, taggable_type, context)
@@ -81,10 +80,11 @@ defmodule Taglet.TagletQuery do
   # Get ALL Tags related to context and taggable_type
   defp get_all_tags(tag_resource, taggable_type, context) do
     Tagging
-    |> where([t],
-      t.tag_id == ^tag_resource.id
-      and t.taggable_type == ^taggable_type
-      and t.context == ^context
+    |> where(
+      [t],
+      t.tag_id == ^tag_resource.id and
+        t.taggable_type == ^taggable_type and
+        t.context == ^context
     )
   end
 
@@ -97,17 +97,19 @@ defmodule Taglet.TagletQuery do
 
   defp join_taggings_from_model(query, context, taggable_type) do
     query
-    |> join(:inner, [m], tg in Tagging,
-      tg.taggable_type == ^taggable_type
-      and
-      tg.context == ^context
-      and
-      m.id == tg.taggable_id
+    |> join(
+      :inner,
+      [m],
+      tg in Tagging,
+      on:
+        tg.taggable_type == ^taggable_type and
+          tg.context == ^context and
+          m.id == tg.taggable_id
     )
   end
 
   defp join_tags(query) do
     query
-    |> join(:inner, [m, tg], t in Tag, t.id == tg.tag_id)
+    |> join(:inner, [m, tg], t in Tag, on: t.id == tg.tag_id)
   end
 end

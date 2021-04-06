@@ -11,5 +11,5 @@ config :taglet, Taglet.Repo,
   username: "postgres",
   password: "postgres",
   database: "taglet_test",
-  hostname: "db",
+  hostname: "localhost",
   poolsize: 10

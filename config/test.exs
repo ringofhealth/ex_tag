@@ -13,3 +13,5 @@ config :taglet, Taglet.Repo,
   database: "taglet_test",
   hostname: "localhost",
   poolsize: 10
+
+config :logger, level: :warn

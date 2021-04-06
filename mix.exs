@@ -38,8 +38,9 @@ defmodule Taglet.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:ecto, ">= 2.1.0"},
-      {:postgrex, "~> 0.13.0"},
+      {:ecto, ">= 3.4.0"},
+      {:ecto_sql, "~> 3.4"},
+      {:postgrex, ">= 0.0.0"},
       {:inflex, "~> 1.8.1"},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
     ]

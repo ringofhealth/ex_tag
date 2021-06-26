@@ -56,6 +56,16 @@ defmodule Taglet.TagletQuery do
     |> select([m, tg, t], m)
   end
 
+  def search_tagged_with_any(query, tags, context, taggable_type) do
+    query
+    |> join_taggings_from_model(context, taggable_type)
+    |> join_tags
+    |> where([m, tg, t], t.name in ^tags)
+    |> group_by([m, tg, t], m.id)
+    |> order_by([m, t, tg], asc: m.inserted_at)
+    |> select([m, tg, t], m)
+  end
+
   @doc """
   Build the query to get all Tags of a tag_resource and context.
   """

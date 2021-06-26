@@ -227,6 +227,19 @@ defmodule Taglet do
     do_tags_search(model, tags, context) |> repo().all(opts)
   end
 
+  @spec tagged_with_any(tags, module, context, opts) :: list
+  def tagged_with_any(tags, model, context \\ "tags", opts \\ [])
+
+  def tagged_with_any(tag, model, context, opts) when is_bitstring(tag),
+    do: tagged_with([tag], model, context, opts)
+
+  def tagged_with_any(tag, model, context, _opts) when is_list(context),
+    do: tagged_with_any(tag, model, "tags", context)
+
+  def tagged_with_any(tags, model, context, opts) do
+    do_tags_search_any(model, tags, context) |> repo().all(opts)
+  end
+
   @doc """
   The same than tagged_with/3 but returns the query instead of db results.
 
@@ -248,6 +261,14 @@ defmodule Taglet do
 
     queryable
     |> TagletQuery.search_tagged_with(tags, context, taggable_type(schema))
+  end
+
+  defp do_tags_search_any(queryable, tags, context) do
+    %Ecto.Query{from: %Ecto.Query.FromExpr{source: {_source, schema}}} =
+      Ecto.Queryable.to_query(queryable)
+
+    queryable
+    |> TagletQuery.search_tagged_with_any(tags, context, taggable_type(schema))
   end
 
   defp taggable_type(module), do: module |> Module.split() |> List.last()

@@ -19,3 +19,4 @@ erl_crash.dump
 # Ignore my own config for docker
 Dockerfile
 docker-compose.yml
+.elixir_ls/

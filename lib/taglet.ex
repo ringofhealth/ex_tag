@@ -255,6 +255,15 @@ defmodule Taglet do
     do_tags_search(query, tags, context)
   end
 
+  def tagged_with_any_query(query, tags, context \\ "tags")
+
+  def tagged_with_any_query(query, tag, context) when is_bitstring(tag),
+    do: tagged_with_query(query, [tag], context)
+
+  def tagged_with_any_query(query, tags, context) do
+    do_tags_search_any(query, tags, context)
+  end
+
   defp do_tags_search(queryable, tags, context) do
     %Ecto.Query{from: %Ecto.Query.FromExpr{source: {_source, schema}}} =
       Ecto.Queryable.to_query(queryable)

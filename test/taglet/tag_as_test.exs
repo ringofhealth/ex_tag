@@ -175,6 +175,28 @@ defmodule Taglet.TagAsTest do
     assert result == [post1, post2]
   end
 
+  test "using the module allows to search for any tagged resources" do
+    post1 = @repo.insert!(%Post{title: "hello world1"})
+    post2 = @repo.insert!(%Post{title: "hello world2"})
+    post3 = @repo.insert!(%Post{title: "hello world3"})
+    post4 = @repo.insert!(%Post{title: "hello world"})
+
+    post5 = @repo.insert!(%Post{title: "hello world3"})
+
+    post6 = @repo.insert!(%Post{title: "hello world3"})
+
+    Post.add_category(post1, "tagged1")
+    Post.add_category(post2, "tagged1")
+    Post.add_category(post3, "tagged2")
+    Post.add_category(post4, "tagged2")
+    Post.add_category(post5, "tagged2")
+    Post.add_categories(post6, ["tagged2", "hello"])
+
+    result = Post.tagged_with_any_categories(["tagged1", "hello"])
+
+    assert result == [post1, post2, post6]
+  end
+
   test "using the module allows to build a query to search for tagged resources" do
     post1 = @repo.insert!(%Post{title: "hello world1"})
     post2 = @repo.insert!(%Post{title: "hello world2"})
@@ -185,6 +207,20 @@ defmodule Taglet.TagAsTest do
     query = Post |> where(title: "hello world1")
 
     result = Post.tagged_with_query_category(query, "tagged1") |> @repo.all
+
+    assert result == [post1]
+  end
+
+  test "using the module allows to build a query to search for any tagged resources" do
+    post1 = @repo.insert!(%Post{title: "hello world1"})
+    post2 = @repo.insert!(%Post{title: "hello world2"})
+    post3 = @repo.insert!(%Post{title: "hello world3"})
+    Post.add_category(post1, "tagged1")
+    Post.add_category(post2, "tagged1")
+    Post.add_category(post3, "tagged2")
+    query = Post |> where(title: "hello world1")
+
+    result = Post.tagged_with_any_query_categories(query, ["tagged1"]) |> @repo.all
 
     assert result == [post1]
   end

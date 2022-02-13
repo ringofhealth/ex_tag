@@ -85,7 +85,7 @@ defmodule Taglet.TagAs do
       end
 
       def unquote(:"tagged_with_any_query_#{context}")(queryable, tags) do
-        Taglet.tagged_with_query(queryable, tags, unquote(context))
+        Taglet.tagged_with_any_query(queryable, tags, unquote(context))
       end
     end
   end

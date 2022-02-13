@@ -194,11 +194,28 @@ defmodule TagletTest do
     Taglet.add(post2, "tagged2")
     Taglet.add(post3, "tagged3")
     Taglet.add(post3, "tagged4")
-    query = Post |> where(title: "hello world2")
+    query = Post
 
     result = Taglet.tagged_with_any_query(query, ["tagged1", "tagged2"]) |> @repo.all
 
-    assert result == [post2]
+    assert result == [post1, post2]
+  end
+
+  test "tagged_with_any_query/4 returns a query of all structs associated any tagged" do
+    post1 = @repo.insert!(%Post{title: "hello world1"})
+    post2 = @repo.insert!(%Post{title: "hello world2"})
+    post3 = @repo.insert!(%Post{title: "hello world3"})
+    post4 = @repo.insert!(%Post{title: "hello world4"})
+
+    Taglet.add(post1, "tagged1")
+    Taglet.add(post2, "tagged2")
+    Taglet.add(post3, "tagged3")
+    Taglet.add(post3, "tagged4")
+    query = Post
+
+    result = Taglet.tagged_with_any_query(Post, ["tagged1", "tagged2"]) |> @repo.all
+
+    assert result == [post1, post2]
   end
 
   test "tagged_with_query/4 returns a query of structs associated to a tag" do
@@ -208,7 +225,7 @@ defmodule TagletTest do
     Taglet.add(post1, "tagged1")
     Taglet.add(post2, ["tagged1", "tagged2"])
     Taglet.add(post3, "tagged2")
-    query = Post |> where(title: "hello world2")
+    query = Post
 
     result = Taglet.tagged_with_query(query, ["tagged1", "tagged2"]) |> @repo.all
 

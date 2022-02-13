@@ -218,11 +218,24 @@ defmodule Taglet.TagAsTest do
     Post.add_category(post1, "tagged1")
     Post.add_category(post2, "tagged1")
     Post.add_category(post3, "tagged2")
-    query = Post |> where(title: "hello world1")
+    query = Post
 
     result = Post.tagged_with_any_query_categories(query, ["tagged1"]) |> @repo.all
 
-    assert result == [post1]
+    assert result == [post1, post2]
+  end
+
+  test "using the module allows to build a query to all resource tagged" do
+    post1 = @repo.insert!(%Post{title: "hello world1"})
+    post2 = @repo.insert!(%Post{title: "hello world2"})
+    post3 = @repo.insert!(%Post{title: "hello world3"})
+    Post.add_category(post1, "tagged1")
+    Post.add_category(post2, "tagged2")
+    Post.add_category(post3, "tagged3")
+
+    result = Post.tagged_with_any_query_categories(Post, ["tagged1", "tagged3"]) |> @repo.all
+
+    assert result == [post1, post3]
   end
 
   test "Update a tag name without relations" do

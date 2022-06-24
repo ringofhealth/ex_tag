@@ -15,7 +15,6 @@ defmodule Taglet.TagletQuery do
     Tag
     |> join_taggings_from_tag(context, taggable_type, taggable_id)
     |> distinct([t, tg], t.name)
-    |> order_by([t, tg], asc: tg.inserted_at)
     |> select([t, tg], t.name)
   end
 

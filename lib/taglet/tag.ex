@@ -5,9 +5,9 @@ defmodule Taglet.Tag do
   @foreign_key_type :binary_id
 
   schema "tags" do
-    field :name, :string
+    field(:name, :string)
 
-    has_many :taggings, Taglet.Tagging
+    has_many(:taggings, Taglet.Tagging)
   end
 
   def changeset(struct, params \\ %{}) do

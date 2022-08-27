@@ -35,7 +35,7 @@ defmodule Mix.Tasks.Taglet.Install do
 
           add(:tag_id, references(:tags, on_delete: :delete_all, type: :binary_id))
 
-          add :taggable_id,      :#{taggable_id_type}
+          add :taggable_id,      :#{taggable_id_type}, null: false
           add :taggable_type,    :string, null: false
 
           add :context, :string, null: false, default: "tag"

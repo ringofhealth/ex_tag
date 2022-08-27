@@ -5,7 +5,7 @@ defmodule Taglet.Tag do
   @foreign_key_type :binary_id
 
   schema "tags" do
-    field :name, :string, null: false
+    field :name, :string
 
     has_many :taggings, Taglet.Tagging
   end

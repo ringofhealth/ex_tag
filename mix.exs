@@ -2,20 +2,21 @@ defmodule Taglet.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :taglet,
-     version: "0.6.0",
-     elixir: "~> 1.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     elixirc_paths: elixirc_paths(Mix.env),
-     package: package(),
-     deps: deps(),
+    [
+      app: :taglet,
+      version: "0.6.0",
+      elixir: "~> 1.4",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      package: package(),
+      deps: deps(),
 
-     # Docs
-     name: "Taglet",
-     description: description(),
-     source_url: "https://github.com/bizneo/taglet",
-     docs: [main: "Taglet", extras: ["README.md"]]
+      # Docs
+      name: "Taglet",
+      description: description(),
+      source_url: "https://github.com/bizneo/taglet",
+      docs: [main: "Taglet", extras: ["README.md"]]
     ]
   end
 
@@ -41,8 +42,8 @@ defmodule Taglet.Mixfile do
       {:ecto, ">= 3.4.0"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      {:inflex, "~> 1.8.1"},
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
+      {:inflex, "~> 2.1.0"},
+      {:ex_doc, "~> 0.14", only: :dev, runtime: false}
     ]
   end
 

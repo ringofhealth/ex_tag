@@ -21,6 +21,7 @@ defmodule Mix.Tasks.Taglet.Install do
           add(:id, :binary_id, primary_key: true)
           add :name, :string, null: false
         end
+        create(unique_index(:tags, [:name]))
       end
     end
     """)
@@ -43,8 +44,13 @@ defmodule Mix.Tasks.Taglet.Install do
           add :inserted_at,  :utc_datetime, null: false
         end
 
-        create index(:taggings, [:tag_id])
-        create index(:taggings, [:taggable_id, :taggable_type, :context])
+        create(index(:taggings, [:tag_id]))
+        create(index(:taggings, [:taggable_id]))
+        create(index(:taggings, [:taggable_type]))
+        create(index(:taggings, [:context]))
+
+        create(index(:taggings, [:taggable_type, :context, :taggable_id]))
+        create(index(:taggings, [:tag_id, :taggable_type, :context, :taggable_id]))
       end
     end
     """)

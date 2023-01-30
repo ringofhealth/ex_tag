@@ -14,5 +14,6 @@ defmodule Taglet.Tag do
     struct
     |> cast(params, [:name])
     |> validate_required(:name)
+    |> unique_constraint(:name, message: "tag already imported")
   end
 end

@@ -90,11 +90,14 @@ defmodule Taglet.TagletQuery do
   end
 
   def count_tagging_by_tag_value(value) do
-    Tag
-    |> where([t], t.name == ^value)
-    |> select([t], t.id)
+    tag_id =
+      Tag
+      |> where([t], t.name == ^value)
+      |> select([t], t.id)
+      |> repo().one()
+
+    count_tagging_by_tag_id(tag_id)
     |> repo().one()
-    |> count_tagging_by_tag_id()
   end
 
   # Get ALL Tags related to context and taggable_type

@@ -1,6 +1,7 @@
 defmodule Taglet.TagletQuery do
   import Ecto.{Query}
   alias Taglet.{Tagging, Tag}
+  import Taglet.RepoClient
 
   @moduledoc """
   Allow to build essential ecto queries for taglet
@@ -92,7 +93,7 @@ defmodule Taglet.TagletQuery do
     Tag
     |> where([t], t.name == ^value)
     |> select([t], t.id)
-    |> Repo.one()
+    |> repo().one()
     |> count_tagging_by_tag_id()
   end
 

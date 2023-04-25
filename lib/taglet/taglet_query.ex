@@ -51,7 +51,6 @@ defmodule Taglet.TagletQuery do
     |> where([m, tg, t], t.name in ^tags)
     |> group_by([m, tg, t], m.id)
     |> having([m, tg, t], count(tg.taggable_id) == ^tags_length)
-    |> order_by([m, t, tg], asc: m.inserted_at)
     |> select([m, tg, t], m)
   end
 
@@ -61,7 +60,6 @@ defmodule Taglet.TagletQuery do
     |> join_tags
     |> where([m, tg, t], t.name in ^tags)
     |> group_by([m, tg, t], m.id)
-    |> order_by([m, t, tg], asc: m.inserted_at)
     |> select([m, tg, t], m)
   end
 
@@ -80,10 +78,22 @@ defmodule Taglet.TagletQuery do
     end
   end
 
+  def count_tagging_by_tag_id(nil) do
+    nil
+  end
+
   def count_tagging_by_tag_id(tag_id) do
     Tagging
     |> where([t], t.tag_id == ^tag_id)
     |> select([p], count(p.id))
+  end
+
+  def count_tagging_by_tag_value(value) do
+    Tag
+    |> where([t], t.name == ^value)
+    |> select([t], t.id)
+    |> Repo.one()
+    |> count_tagging_by_tag_id()
   end
 
   # Get ALL Tags related to context and taggable_type
